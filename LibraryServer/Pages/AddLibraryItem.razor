@@ -1,0 +1,227 @@
+﻿@page "/addLibraryItem/{categoryId:int}"
+
+@using DAL
+@using LibraryServer.Models
+@using Microsoft.Extensions.Configuration
+@using System.Diagnostics
+@using Microsoft.AspNetCore.Components
+@inject IDataAccess data
+@inject IConfiguration config
+@inject NavigationManager navigationManager
+
+
+<h3>Add Library Item</h3>
+
+<select class="form-control" @onchange="@OnSelect" style="width:170px">
+    @foreach (var type in types)
+    {
+        <option value=@type>@type</option>
+    }
+</select>
+<br />
+
+@switch (selectedString)
+{
+    case "Book":
+        <div class="row">
+            <div class="col-md-4">
+                <form>
+                    <div class="form-group">
+                        <label for="Name" class="control-label">Title</label>
+                        <input for="Name" class="form-control"
+                               @bind-value="@Title" />
+                    </div>
+                    <div class="form-group">
+                        <label for="Name" class="control-label">Author</label>
+                        <input for="Name" class="form-control"
+                               @bind-value="@Author" />
+                    </div>
+                    <div class="form-group">
+                        <label for="Name" class="control-label">Pages</label>
+                        <input for="Name" class="form-control"
+                               @bind-value="@Pages" />
+                    </div>
+                    <div class="form-group">
+                        <label for="Name" class="control-label">Type</label>
+                        <input for="Name" class="form-control"
+                               @bind-value="@Type" />
+                    </div>
+                    <div class="form-group">
+                        <label for="Name" class="control-label">CategoryId</label>
+                        <input for="Name" class="form-control"
+                               @bind-value="@categoryId" />
+                    </div>
+                    <div class="form-group">
+                        <label for="Name" class="control-label">Is Borrowable: true</label>
+                        <input for="Name" class="form-control" style="visibility: hidden;" @bind-value="@IsBorrowable" />
+                    </div>
+                    <div class="form-group">
+                        <button type="button" class="btn btn-primary"
+                                @onclick="() => addLibraryItem()">
+                            Add
+                        </button>
+                        <button type="button" class="btn btn-warning"
+                                @onclick="() => cancel()">
+                            Cancel
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        break;
+    case "DVD":
+    case "Audio Book":
+        <div class="row">
+            <div class="col-md-4">
+                <form>
+                    <div class="form-group">
+                        <label for="Name" class="control-label">Title</label>
+                        <input for="Name" class="form-control"
+                               @bind-value="@Title" />
+                    </div>
+                    <div class="form-group">
+                        <label for="Name" class="control-label">Runtime Minutes</label>
+                        <input for="Name" class="form-control"
+                               @bind-value="@RunTimeMinutes" />
+                    </div>
+                    <div class="form-group">
+                        <label for="Name" class="control-label">Type</label>
+                        <input for="Name" class="form-control"
+                               @bind-value="@Type" />
+                    </div>
+                    <div class="form-group">
+                        <label for="Name" class="control-label">CategoryId</label>
+                        <input for="Name" class="form-control"
+                               @bind-value="@categoryId" />
+                    </div>
+                    <div class="form-group">
+                        <label for="Name" class="control-label">Is Borrowable: true</label>
+                        <input for="Name" class="form-control" style="visibility: hidden;" @bind-value="@IsBorrowable" />
+                    </div>
+                    <div class="form-group">
+                        <button type="button" class="btn btn-primary"
+                                @onclick="() => addLibraryItem()">
+                            Add
+                        </button>
+                        <button type="button" class="btn btn-warning"
+                                @onclick="() => cancel()">
+                            Cancel
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        break;
+    case "Reference Book":
+        <div class="row">
+            <div class="col-md-4">
+                <form>
+                    <div class="form-group">
+                        <label for="Name" class="control-label">Title</label>
+                        <input for="Name" class="form-control"
+                               @bind-value="@Title" />
+                    </div>
+                    <div class="form-group">
+                        <label for="Name" class="control-label">Author</label>
+                        <input for="Name" class="form-control"
+                               @bind-value="@Author" />
+                    </div>
+                    <div class="form-group">
+                        <label for="Name" class="control-label">Pages</label>
+                        <input for="Name" class="form-control"
+                               @bind-value="@Pages" />
+                    </div>
+                    <div class="form-group">
+                        <label for="Name" class="control-label">Type</label>
+                        <input for="Name" class="form-control"
+                               @bind-value="@Type" />
+                    </div>
+                    <div class="form-group">
+                        <label for="Name" class="control-label">CategoryId</label>
+                        <input for="Name" class="form-control"
+                               @bind-value="@categoryId" />
+                    </div>
+                    <div class="form-group">
+                        <label for="Name" class="control-label">Is Borrowable: false</label>
+                        <input for="Name" class="form-control" style="visibility: hidden" @bind-value="@IsBorrowable" />
+                    </div>
+                    <div class="form-group">
+                        <button type="button" class="btn btn-primary"
+                                @onclick="() => addLibraryItem()">
+                            Add
+                        </button>
+                        <button type="button" class="btn btn-warning"
+                                @onclick="() => cancel()">
+                            Cancel
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        break;
+    default:
+        break;
+}
+
+
+@code {
+
+    [Parameter]
+    public int categoryId { get; set; }
+
+    string Title;
+    string Author;
+    int Pages;
+    string Type;
+    int RunTimeMinutes;
+    int IsBorrowable;
+
+    List<string> types = new List<string>() { "Book", "DVD", "Audio Book", "Reference Book" };
+    string selectedString = "Book";
+
+    private async Task addLibraryItem()
+    {
+
+        string sql = "insert into libraryitem (CategoryId, Title, Author, Pages, RunTimeMinutes, IsBorrowable, Type) " +
+                " values (@categoryId, @Title, @Author, @Pages, @RunTimeMinutes, @IsBorrowable, @Type);";
+
+        if(selectedString == "Reference Book")
+        {
+            await data.StoreData(sql, new 
+            {   
+                CategoryId = @categoryId,
+                Title = @Title,
+                Author = @Author,
+                Pages = @Pages,
+                RunTimeMinutes = @RunTimeMinutes,
+                IsBorrowable = 0,
+                Type = @Type,
+            }, config.GetConnectionString("DefaultConnection"));
+        }
+        else
+        {
+            await data.StoreData(sql, new
+            {
+                CategoryId = @categoryId,
+                Title = @Title,
+                Author = @Author,
+                Pages = @Pages,
+                RunTimeMinutes = @RunTimeMinutes,
+                IsBorrowable = 1,
+                Type = @Type,
+            }, config.GetConnectionString("DefaultConnection"));
+        }
+
+        navigationManager.NavigateTo("/category");
+    }
+
+    void cancel()
+    {
+        navigationManager.NavigateTo("/category");
+    }
+
+    void OnSelect(ChangeEventArgs e)
+    {
+        selectedString = e.Value.ToString();
+    }
+}

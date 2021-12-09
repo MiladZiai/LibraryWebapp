@@ -1,0 +1,10 @@
+C:\Users\milad\source\repos\LibraryServer\DatabaseLibrary\bin\Debug\netcoreapp3.1\DAL.deps.json
+C:\Users\milad\source\repos\LibraryServer\DatabaseLibrary\bin\Debug\netcoreapp3.1\DAL.dll
+C:\Users\milad\source\repos\LibraryServer\DatabaseLibrary\bin\Debug\netcoreapp3.1\DAL.pdb
+C:\Users\milad\source\repos\LibraryServer\DatabaseLibrary\obj\Debug\netcoreapp3.1\DAL.csproj.AssemblyReference.cache
+C:\Users\milad\source\repos\LibraryServer\DatabaseLibrary\obj\Debug\netcoreapp3.1\DAL.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\milad\source\repos\LibraryServer\DatabaseLibrary\obj\Debug\netcoreapp3.1\DAL.AssemblyInfoInputs.cache
+C:\Users\milad\source\repos\LibraryServer\DatabaseLibrary\obj\Debug\netcoreapp3.1\DAL.AssemblyInfo.cs
+C:\Users\milad\source\repos\LibraryServer\DatabaseLibrary\obj\Debug\netcoreapp3.1\DAL.csproj.CoreCompileInputs.cache
+C:\Users\milad\source\repos\LibraryServer\DatabaseLibrary\obj\Debug\netcoreapp3.1\DAL.dll
+C:\Users\milad\source\repos\LibraryServer\DatabaseLibrary\obj\Debug\netcoreapp3.1\DAL.pdb

@@ -1,0 +1,56 @@
+﻿@page "/addCategory"
+
+@using DAL
+@using LibraryServer.Models
+@using Microsoft.Extensions.Configuration
+@using System.Diagnostics
+@using Microsoft.AspNetCore.Components
+@inject IDataAccess data
+@inject IConfiguration config
+@inject NavigationManager navigationManager
+
+
+<h3>Add Category</h3>
+
+<div class="row">
+    <div class="col-md-4">
+        <form>
+            <div class="form-group">
+                <label for="Name" class="control-label">Name</label>
+                <input for="Name" class="form-control"
+                       @bind-value="@categoryName" />
+            </div>
+            <div class="form-group">
+                <button type="button" class="btn btn-primary"
+                        @onclick="() => addCategory()">
+                    Add
+                </button>
+                <button type="button" class="btn btn-warning"
+                        @onclick="() => cancel()">
+                    Cancel
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+@code {
+
+    string categoryName;
+
+    private async Task addCategory()
+    {
+
+        string sql = "insert into category (CategoryName) values (@CategoryName);";
+
+        await data.StoreData(sql, new { CategoryName = @categoryName }, config.GetConnectionString("DefaultConnection"));
+
+        navigationManager.NavigateTo("/category");
+    }
+
+    void cancel()
+    {
+        navigationManager.NavigateTo("/category");
+    }
+}

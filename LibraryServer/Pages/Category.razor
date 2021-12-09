@@ -1,0 +1,71 @@
+﻿@page "/category"
+
+@using DAL
+@using LibraryServer.Models
+@using Microsoft.Extensions.Configuration
+@using System.Diagnostics
+@inject IDataAccess data
+@inject IConfiguration config
+
+
+<h3>Category</h3>
+
+@if (category == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <div>
+        <a class="btn btn-primary" href='/addCategory'>Add category</a>
+    </div>
+    <br />
+
+    <div>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Category Name</th>
+                    <th>Action</th>
+                    <th></th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var c in category)
+                {
+                    <tr>
+                        <td>@c.Id</td>
+                        <td>@c.CategoryName</td>
+                        <td><a class="btn btn-primary" href='/editCategory/@c.Id/@c.CategoryName'>Edit category</a></td>
+                        <td><a class="btn btn-primary" href='/addLibraryItem/@c.Id'>Add Item</a></td>
+                        <td><a class="btn btn-warning" @onclick="() => deleteCategory(c.Id)">Delete category</a></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+
+
+@code {
+
+    List<CategoryModel> category;
+
+    protected override async Task OnInitializedAsync()
+    {
+        string sql = "select * from category";
+
+        category = await data.LoadData<CategoryModel, dynamic>(sql, new { }, config.GetConnectionString("DefaultConnection"));
+    }
+
+    protected async Task deleteCategory(int id)
+    {
+        string sql = "delete from category where Id = @id";
+
+        await data.StoreData(sql, new { Id = id }, config.GetConnectionString("DefaultConnection"));
+
+        await OnInitializedAsync();
+    }
+}

@@ -1,0 +1,92 @@
+﻿@page "/libraryItems"
+
+@using DAL
+@using LibraryServer.Models
+@using Microsoft.Extensions.Configuration
+@using System.Diagnostics
+@using System.Linq 
+@inject IDataAccess data
+@inject IConfiguration config
+
+
+<h3>Library Items</h3>
+
+@if (libraryItem == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <p>Sort by</p>
+    <select class="form-control" @onchange="@OnSelect" style="width:170px">
+        @foreach (var option in options)
+        {
+            <option value=@option>@option</option>
+        }
+    </select>
+    <br />
+
+    <div>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Category Name</th>
+                    <th>Borrower</th>
+                    <th>Borrowed Date</th>
+                    <th>Title</th>
+                    <th>Type</th>
+                    <th>Action</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var l in libraryItem)
+                {
+                    <tr>
+                        <td>@l.CategoryName</td>
+                        <td>@l.Borrower</td>
+                        <td>@l.BorrowDate</td>
+                        <td>@l.Title</td>
+                        <td>@l.Type</td>
+                        <td><a class="btn btn-primary" href='/editLibraryItem/@l.Id/@l.Type'>Edit Item</a></td>
+                        <td><a class="btn btn-warning" @onclick="() => deleteItem(l.Id)">Delete Item</a></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+
+
+@code {
+
+    List<LibraryItemModel> libraryItem;
+
+    List<string> options = new List<string>() { "Category Name", "Type" };
+    string selectedString = "Category Name";
+
+    protected override async Task OnInitializedAsync()
+    {
+        string sql = "select l.Id, l.Borrower, l.BorrowDate, l.Title, l.Type, c.CategoryName " +
+                " from libraryitem as l " +
+                " left join category as c " +
+                " on l.CategoryId = c.Id " +
+                " order by c.CategoryName ";
+
+        libraryItem = await data.LoadData<LibraryItemModel, dynamic>(sql, new { }, config.GetConnectionString("DefaultConnection"));
+    }
+
+    protected async Task deleteItem(int id)
+    {
+        string sql = "delete from libraryitem where Id = @id";
+
+        await data.StoreData(sql, new { Id = id }, config.GetConnectionString("DefaultConnection"));
+
+        await OnInitializedAsync();
+    }
+
+    void OnSelect(ChangeEventArgs e)
+    {
+        selectedString = e.Value.ToString();
+    }
+}
