@@ -118,23 +118,30 @@ using System.Linq;
         }
         #pragma warning restore 1998
 #nullable restore
-#line 61 "C:\Users\milad\source\repos\LibraryServer\LibraryServer\Pages\LibraryItems.razor"
+#line 75 "C:\Users\milad\source\repos\LibraryServer\LibraryServer\Pages\LibraryItems.razor"
        
 
-    List<LibraryItemModel> libraryItem;
+    private class OptionSelector
+    {
+        public string Value { get; set; }
+        public string Name { get; set; }
+    }
 
-    List<string> options = new List<string>() { "Category Name", "Type" };
+    List<LibraryItemModel> libraryItems;
+
+    List<OptionSelector> options = new List<OptionSelector>() 
+    {
+        new OptionSelector { Value = "c.CategoryName", Name = "Category Name"},
+        new OptionSelector { Value = "l.Type", Name = "Type" }
+    };
+
     string selectedString = "Category Name";
 
     protected override async Task OnInitializedAsync()
     {
-        string sql = "select l.Id, l.Borrower, l.BorrowDate, l.Title, l.Type, c.CategoryName " +
-                " from libraryitem as l " +
-                " left join category as c " +
-                " on l.CategoryId = c.Id " +
-                " order by c.CategoryName ";
+        string sql = InitSql("c.CategoryName");
 
-        libraryItem = await data.LoadData<LibraryItemModel, dynamic>(sql, new { }, config.GetConnectionString("DefaultConnection"));
+        libraryItems = await data.LoadData<LibraryItemModel, dynamic>(sql, new { }, config.GetConnectionString("DefaultConnection"));
     }
 
     protected async Task deleteItem(int id)
@@ -146,9 +153,22 @@ using System.Linq;
         await OnInitializedAsync();
     }
 
-    void OnSelect(ChangeEventArgs e)
+    protected async Task OnSelect(ChangeEventArgs e)
     {
-        selectedString = e.Value.ToString();
+        selectedString = this.options.SingleOrDefault(x => x.Value == e.Value.ToString()).Name;
+        var selector = e.Value.ToString();
+        var sql = InitSql(selector);
+
+        libraryItems = await data.LoadData<LibraryItemModel, dynamic>(sql, new { }, config.GetConnectionString("DefaultConnection"));
+    }
+
+    private string InitSql(string selector)
+    {
+        return "select l.Id, l.Borrower, l.BorrowDate, l.Title, l.Type, c.CategoryName " +
+                        " from libraryitem as l " +
+                        " left join category as c " +
+                        " on l.CategoryId = c.Id " +
+                        $" order by {selector} ";
     }
 
 #line default

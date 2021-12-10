@@ -124,7 +124,7 @@ using Microsoft.AspNetCore.Components;
         }
         #pragma warning restore 1998
 #nullable restore
-#line 120 "C:\Users\milad\source\repos\LibraryServer\LibraryServer\Pages\EditLibraryItem.razor"
+#line 130 "C:\Users\milad\source\repos\LibraryServer\LibraryServer\Pages\EditLibraryItem.razor"
        
 
     List<LibraryItemModel> libraryItem;
@@ -135,6 +135,8 @@ using Microsoft.AspNetCore.Components;
     [Parameter]
     public string type { get; set; }
 
+    string Borrower;
+
     protected override async Task OnInitializedAsync()
     {
         string sql = " select l.Id, l.Title, l.Type, l.Author, l.Pages, l.RunTimeMinutes, l.IsBorrowable, l.CategoryId " +
@@ -144,26 +146,24 @@ using Microsoft.AspNetCore.Components;
         libraryItem = await data.LoadData<LibraryItemModel, dynamic>(sql, new { Id = @id }, config.GetConnectionString("DefaultConnection"));
     }
 
-    //private async Task editLibraryItem()
-    //{
+    private async Task editLibraryItem()
+    {
+        if(@Borrower == null)
+        {
+            var sql = " update libraryitem set Borrower = @Borrower, BorrowDate = null " +
+                      " where Id = @id ";
+            await data.StoreData(sql, new { Borrower = @Borrower, Id = @id }, config.GetConnectionString("DefaultConnection"));
+        }
+        else
+        {
+            string sql = " update libraryitem set Borrower = @Borrower, BorrowDate = CURDATE() " +
+                         " where Id = @id ";
+            await data.StoreData(sql, new { Borrower = @Borrower, Id = @id }, config.GetConnectionString("DefaultConnection"));
+        }
 
-    //    string sql = " update libraryitem set (CategoryId, Title, Author, Pages, RunTimeMinutes, Type) " +
-    //                 " values (@CategoryId, @Title, @Author, @Pages, @RunTimeMinutes, @Type)  " +
-    //                 " where Id = @id ";
 
-    //    await data.StoreData(sql, new
-    //    {
-    //        CategoryId = @CategoryId,
-    //        Title = @Title,
-    //        Author = @Author,
-    //        Pages = @Pages,
-    //        RunTimeMinutes = @RunTimeMinutes,
-    //        Type = @Type,
-    //        Id = @id,
-    //    }, config.GetConnectionString("DefaultConnection"));
-
-    //    navigationManager.NavigateTo("/category");
-    //}
+        navigationManager.NavigateTo("/libraryItems");
+    }
 
     void cancel()
     {

@@ -22,30 +22,35 @@
                 <div class="form-group">
                     <label for="Name" class="control-label">Title</label>
                     <input for="Name" class="form-control"
-                           @bind-value="@libraryItem[0].Title" readonly/>
+                           @bind-value="@libraryItem[0].Title" readonly />
                 </div>
                 <div class="form-group">
                     <label for="Name" class="control-label">Runtime Minutes</label>
                     <input for="Name" class="form-control"
-                           @bind-value="@libraryItem[0].RunTimeMinutes" readonly/>
+                           @bind-value="@libraryItem[0].RunTimeMinutes" readonly />
                 </div>
                 <div class="form-group">
                     <label for="Name" class="control-label">Type</label>
                     <input for="Name" class="form-control"
-                           @bind-value="@libraryItem[0].Type" readonly/>
+                           @bind-value="@libraryItem[0].Type" readonly />
                 </div>
                 <div class="form-group">
                     <label for="Name" class="control-label">CategoryId</label>
                     <input for="Name" class="form-control"
-                           @bind-value="@libraryItem[0].CategoryId" readonly/>
+                           @bind-value="@libraryItem[0].CategoryId" readonly />
+                </div>
+                <div class="form-group">
+                    <label for="Name" class="control-label">Borrower</label>
+                    <input for="Name" class="form-control"
+                           @bind-value="@Borrower" />
                 </div>
                 <div class="form-group">
                     <label for="Name" class="control-label">Is Borrowable: true</label>
                     <input for="Name" class="form-control" style="visibility: hidden;" @bind-value="@libraryItem[0].IsBorrowable" />
                 </div>
                 <div class="form-group">
-                    <button type="button" class="btn btn-primary" >
-                        Add
+                    <button type="button" class="btn btn-primary" @onclick="() => editLibraryItem()">
+                        Edit
                     </button>
                     <button type="button" class="btn btn-warning"
                             @onclick="() => cancel()">
@@ -96,14 +101,19 @@ else
                 else
                 {
                     <div class="form-group">
+                        <label for="Name" class="control-label">Borrower</label>
+                        <input for="Name" class="form-control"
+                               @bind-value="@Borrower" />
+                    </div>
+                    <div class="form-group">
                         <label for="Name" class="control-label">Is Borrowable: true</label>
                         <input for="Name" class="form-control" style="visibility: hidden;" @bind-value="@libraryItem[0].IsBorrowable" />
                     </div>
                 }
 
                 <div class="form-group">
-                    <button type="button" class="btn btn-primary">
-                        Add
+                    <button type="button" class="btn btn-primary" @onclick="() => editLibraryItem()">
+                        Edit
                     </button>
                     <button type="button" class="btn btn-warning"
                             @onclick="() => cancel()">
@@ -127,6 +137,8 @@ else
     [Parameter]
     public string type { get; set; }
 
+    string Borrower;
+
     protected override async Task OnInitializedAsync()
     {
         string sql = " select l.Id, l.Title, l.Type, l.Author, l.Pages, l.RunTimeMinutes, l.IsBorrowable, l.CategoryId " +
@@ -136,26 +148,24 @@ else
         libraryItem = await data.LoadData<LibraryItemModel, dynamic>(sql, new { Id = @id }, config.GetConnectionString("DefaultConnection"));
     }
 
-    //private async Task editLibraryItem()
-    //{
+    private async Task editLibraryItem()
+    {
+        if(@Borrower == null)
+        {
+            var sql = " update libraryitem set Borrower = @Borrower, BorrowDate = null " +
+                      " where Id = @id ";
+            await data.StoreData(sql, new { Borrower = @Borrower, Id = @id }, config.GetConnectionString("DefaultConnection"));
+        }
+        else
+        {
+            string sql = " update libraryitem set Borrower = @Borrower, BorrowDate = CURDATE() " +
+                         " where Id = @id ";
+            await data.StoreData(sql, new { Borrower = @Borrower, Id = @id }, config.GetConnectionString("DefaultConnection"));
+        }
 
-    //    string sql = " update libraryitem set (CategoryId, Title, Author, Pages, RunTimeMinutes, Type) " +
-    //                 " values (@CategoryId, @Title, @Author, @Pages, @RunTimeMinutes, @Type)  " +
-    //                 " where Id = @id ";
 
-    //    await data.StoreData(sql, new
-    //    {
-    //        CategoryId = @CategoryId,
-    //        Title = @Title,
-    //        Author = @Author,
-    //        Pages = @Pages,
-    //        RunTimeMinutes = @RunTimeMinutes,
-    //        Type = @Type,
-    //        Id = @id,
-    //    }, config.GetConnectionString("DefaultConnection"));
-
-    //    navigationManager.NavigateTo("/category");
-    //}
+        navigationManager.NavigateTo("/libraryItems");
+    }
 
     void cancel()
     {

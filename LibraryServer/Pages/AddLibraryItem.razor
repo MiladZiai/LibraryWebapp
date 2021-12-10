@@ -187,32 +187,28 @@
 
         if(selectedString == "Reference Book")
         {
-            await data.StoreData(sql, new 
-            {   
-                CategoryId = @categoryId,
-                Title = @Title,
-                Author = @Author,
-                Pages = @Pages,
-                RunTimeMinutes = @RunTimeMinutes,
-                IsBorrowable = 0,
-                Type = @Type,
-            }, config.GetConnectionString("DefaultConnection"));
+            await toggleIsBorrowable(sql, 0);
         }
         else
         {
-            await data.StoreData(sql, new
-            {
-                CategoryId = @categoryId,
-                Title = @Title,
-                Author = @Author,
-                Pages = @Pages,
-                RunTimeMinutes = @RunTimeMinutes,
-                IsBorrowable = 1,
-                Type = @Type,
-            }, config.GetConnectionString("DefaultConnection"));
+            await toggleIsBorrowable(sql, 1);
         }
 
-        navigationManager.NavigateTo("/category");
+        navigationManager.NavigateTo("/libraryItems");
+    }
+
+    private async Task toggleIsBorrowable(string sql, int isBorrowable)
+    {
+        await data.StoreData(sql, new
+        {
+            CategoryId = @categoryId,
+            Title = @Title,
+            Author = @Author,
+            Pages = @Pages,
+            RunTimeMinutes = @RunTimeMinutes,
+            IsBorrowable = isBorrowable,
+            Type = @Type,
+        }, config.GetConnectionString("DefaultConnection"));
     }
 
     void cancel()

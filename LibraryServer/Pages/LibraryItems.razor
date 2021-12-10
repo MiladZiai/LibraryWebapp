@@ -11,7 +11,7 @@
 
 <h3>Library Items</h3>
 
-@if (libraryItem == null)
+@if (libraryItems == null)
 {
     <p><em>Loading...</em></p>
 }
@@ -21,7 +21,7 @@ else
     <select class="form-control" @onchange="@OnSelect" style="width:170px">
         @foreach (var option in options)
         {
-            <option value=@option>@option</option>
+            <option value=@option.Value>@option.Name</option>
         }
     </select>
     <br />
@@ -40,17 +40,31 @@ else
                 </tr>
             </thead>
             <tbody>
-                @foreach (var l in libraryItem)
+                @foreach (var libraryitem in libraryItems)
                 {
-                    <tr>
-                        <td>@l.CategoryName</td>
-                        <td>@l.Borrower</td>
-                        <td>@l.BorrowDate</td>
-                        <td>@l.Title</td>
-                        <td>@l.Type</td>
-                        <td><a class="btn btn-primary" href='/editLibraryItem/@l.Id/@l.Type'>Edit Item</a></td>
-                        <td><a class="btn btn-warning" @onclick="() => deleteItem(l.Id)">Delete Item</a></td>
-                    </tr>
+                    string[] title = @libraryitem.Title.Split(" ");
+                    string acronym = "";
+                    foreach(string word in title)
+                    {
+                        acronym += word.Substring(0,1).ToUpper();
+                    }
+
+                <tr>
+                    <td>@libraryitem.CategoryName</td>
+                    <td>@libraryitem.Borrower</td>
+                    @if (@libraryitem.BorrowDate != null)
+                    {
+                        <td>@libraryitem.BorrowDate.Split(" ")[0]</td>
+                    }
+                    else
+                    {
+                        <td>@libraryitem.BorrowDate</td>
+                    }
+                    <td>@libraryitem.Title (@acronym)</td>
+                    <td>@libraryitem.Type</td>
+                    <td><a class="btn btn-primary" href='/editLibraryItem/@libraryitem.Id/@libraryitem.Type'>Edit Item</a></td>
+                    <td><a class="btn btn-warning" @onclick="() => deleteItem(libraryitem.Id)">Delete Item</a></td>
+                </tr>
                 }
             </tbody>
         </table>
@@ -60,20 +74,27 @@ else
 
 @code {
 
-    List<LibraryItemModel> libraryItem;
+    private class OptionSelector
+    {
+        public string Value { get; set; }
+        public string Name { get; set; }
+    }
 
-    List<string> options = new List<string>() { "Category Name", "Type" };
+    List<LibraryItemModel> libraryItems;
+
+    List<OptionSelector> options = new List<OptionSelector>() 
+    {
+        new OptionSelector { Value = "c.CategoryName", Name = "Category Name"},
+        new OptionSelector { Value = "l.Type", Name = "Type" }
+    };
+
     string selectedString = "Category Name";
 
     protected override async Task OnInitializedAsync()
     {
-        string sql = "select l.Id, l.Borrower, l.BorrowDate, l.Title, l.Type, c.CategoryName " +
-                " from libraryitem as l " +
-                " left join category as c " +
-                " on l.CategoryId = c.Id " +
-                " order by c.CategoryName ";
+        string sql = InitSql("c.CategoryName");
 
-        libraryItem = await data.LoadData<LibraryItemModel, dynamic>(sql, new { }, config.GetConnectionString("DefaultConnection"));
+        libraryItems = await data.LoadData<LibraryItemModel, dynamic>(sql, new { }, config.GetConnectionString("DefaultConnection"));
     }
 
     protected async Task deleteItem(int id)
@@ -85,8 +106,21 @@ else
         await OnInitializedAsync();
     }
 
-    void OnSelect(ChangeEventArgs e)
+    protected async Task OnSelect(ChangeEventArgs e)
     {
-        selectedString = e.Value.ToString();
+        selectedString = this.options.SingleOrDefault(x => x.Value == e.Value.ToString()).Name;
+        var selector = e.Value.ToString();
+        var sql = InitSql(selector);
+
+        libraryItems = await data.LoadData<LibraryItemModel, dynamic>(sql, new { }, config.GetConnectionString("DefaultConnection"));
+    }
+
+    private string InitSql(string selector)
+    {
+        return "select l.Id, l.Borrower, l.BorrowDate, l.Title, l.Type, c.CategoryName " +
+                        " from libraryitem as l " +
+                        " left join category as c " +
+                        " on l.CategoryId = c.Id " +
+                        $" order by {selector} ";
     }
 }
