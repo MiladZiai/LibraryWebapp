@@ -152,6 +152,7 @@ else
     {
         if(@Borrower == null)
         {
+            //Check in by entering empty string
             var sql = " update libraryitem set Borrower = @Borrower, BorrowDate = null " +
                       " where Id = @id ";
             await data.StoreData(sql, new { Borrower = @Borrower, Id = @id }, config.GetConnectionString("DefaultConnection"));

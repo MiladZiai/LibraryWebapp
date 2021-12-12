@@ -109,6 +109,13 @@ using Microsoft.AspNetCore.Components;
 #line default
 #line hidden
 #nullable disable
+#nullable restore
+#line 8 "C:\Users\milad\source\repos\LibraryServer\LibraryServer\Pages\AddLibraryItem.razor"
+using System.Text.RegularExpressions;
+
+#line default
+#line hidden
+#nullable disable
     [Microsoft.AspNetCore.Components.RouteAttribute("/addLibraryItem/{categoryId:int}")]
     public partial class AddLibraryItem : Microsoft.AspNetCore.Components.ComponentBase
     {
@@ -118,7 +125,7 @@ using Microsoft.AspNetCore.Components;
         }
         #pragma warning restore 1998
 #nullable restore
-#line 167 "C:\Users\milad\source\repos\LibraryServer\LibraryServer\Pages\AddLibraryItem.razor"
+#line 171 "C:\Users\milad\source\repos\LibraryServer\LibraryServer\Pages\AddLibraryItem.razor"
        
 
     [Parameter]
@@ -131,28 +138,51 @@ using Microsoft.AspNetCore.Components;
     int RunTimeMinutes;
     int IsBorrowable;
 
+    string errorString;
+
     List<string> types = new List<string>() { "Book", "DVD", "Audio Book", "Reference Book" };
     string selectedString = "Book";
 
     private async Task addLibraryItem()
     {
-
-        string sql = "insert into libraryitem (CategoryId, Title, Author, Pages, RunTimeMinutes, IsBorrowable, Type) " +
-                " values (@categoryId, @Title, @Author, @Pages, @RunTimeMinutes, @IsBorrowable, @Type);";
-
-        if(selectedString == "Reference Book")
+        errorString = "";
+        if(selectedString == "Book" || selectedString == "Reference Book")
         {
-            await toggleIsBorrowable(sql, 0);
+            ValidateTypeBook(Title, Author, Pages, Type);
         }
-        else
+        if(selectedString == "DVD" || selectedString == "Audio Book")
         {
-            await toggleIsBorrowable(sql, 1);
+            ValidateTypeDVDOrAudioBook(Title, RunTimeMinutes, Type);
         }
 
-        navigationManager.NavigateTo("/libraryItems");
+        if(errorString == "")
+        {
+            const string reduceMultiSpace = @"[ ]{2,}";
+            Title = Regex.Replace(Title.Replace("\t", " "), reduceMultiSpace, " ");
+            Type = Regex.Replace(Type.Replace("\t", " "), reduceMultiSpace, " ");
+            if(selectedString == "Book" || selectedString == "Reference Book")
+            {
+                Author = Regex.Replace(Author.Replace("\t", " "), reduceMultiSpace, " ");
+            }
+
+            string sql = " insert into libraryitem (CategoryId, Title, Author, Pages, RunTimeMinutes, IsBorrowable, Type) " +
+                         " values (@categoryId, @Title, @Author, @Pages, @RunTimeMinutes, @IsBorrowable, @Type);";
+
+            if (selectedString == "Reference Book")
+            {
+                await toggleIsBorrowableAndStoreData(sql, 0);
+            }
+            else
+            {
+                await toggleIsBorrowableAndStoreData(sql, 1);
+            }
+
+            navigationManager.NavigateTo("/libraryItems");
+
+        }
     }
 
-    private async Task toggleIsBorrowable(string sql, int isBorrowable)
+    private async Task toggleIsBorrowableAndStoreData(string sql, int isBorrowable)
     {
         await data.StoreData(sql, new
         {
@@ -164,6 +194,22 @@ using Microsoft.AspNetCore.Components;
             IsBorrowable = isBorrowable,
             Type = @Type,
         }, config.GetConnectionString("DefaultConnection"));
+    }
+
+    void ValidateTypeBook(string title, string author, int pages, string type)
+    {
+        if (title == null || author == null || pages == 0 || type == null)
+        {
+            errorString = "Please enter all fields!";
+        }
+    }
+
+    void ValidateTypeDVDOrAudioBook(string title, int runTimeMinutes, string type)
+    {
+        if (title == null || runTimeMinutes == 0 || type == null)
+        {
+            errorString = "Please enter all fields!";
+        }
     }
 
     void cancel()

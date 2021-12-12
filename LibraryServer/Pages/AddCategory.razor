@@ -5,6 +5,7 @@
 @using Microsoft.Extensions.Configuration
 @using System.Diagnostics
 @using Microsoft.AspNetCore.Components
+@using System.Text.RegularExpressions 
 @inject IDataAccess data
 @inject IConfiguration config
 @inject NavigationManager navigationManager
@@ -33,20 +34,33 @@
         </form>
     </div>
 </div>
+<p style="color: red;">@errorString</p>
 
 
 @code {
 
     string categoryName;
+    String errorString;
 
     private async Task addCategory()
     {
+        if (categoryName != null)
+        {
+            const string reduceMultiSpace = @"[ ]{2,}";
+            categoryName = Regex.Replace(categoryName.Replace("\t", " "), reduceMultiSpace, " ");
 
-        string sql = "insert into category (CategoryName) values (@CategoryName);";
+            errorString = "";
 
-        await data.StoreData(sql, new { CategoryName = @categoryName }, config.GetConnectionString("DefaultConnection"));
+            string sql = "insert into category (CategoryName) values (@CategoryName);";
 
-        navigationManager.NavigateTo("/category");
+            await data.StoreData(sql, new { CategoryName = @categoryName }, config.GetConnectionString("DefaultConnection"));
+
+            navigationManager.NavigateTo("/category");
+        }
+        else
+        {
+            errorString = "Please enter a category name!";
+        }
     }
 
     void cancel()

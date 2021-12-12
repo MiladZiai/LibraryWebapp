@@ -112,10 +112,12 @@ using System.Diagnostics;
         }
         #pragma warning restore 1998
 #nullable restore
-#line 52 "C:\Users\milad\source\repos\LibraryServer\LibraryServer\Pages\Category.razor"
+#line 53 "C:\Users\milad\source\repos\LibraryServer\LibraryServer\Pages\Category.razor"
        
 
     List<CategoryModel> category;
+
+    string ErrorMsg = "";
 
     protected override async Task OnInitializedAsync()
     {
@@ -126,11 +128,22 @@ using System.Diagnostics;
 
     protected async Task deleteCategory(int id)
     {
-        string sql = "delete from category where Id = @id";
 
-        await data.StoreData(sql, new { Id = id }, config.GetConnectionString("DefaultConnection"));
+        try
+        {
+            string sql = "delete from category where Id = @id";
 
-        await OnInitializedAsync();
+            await data.StoreData(sql, new { Id = id }, config.GetConnectionString("DefaultConnection"));
+
+            ErrorMsg = "";
+
+            await OnInitializedAsync();
+        }
+        catch (Exception e)
+        {
+            ErrorMsg = "Could not delete, category has items!";
+        }
+
     }
 
 #line default

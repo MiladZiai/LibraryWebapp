@@ -109,6 +109,13 @@ using Microsoft.AspNetCore.Components;
 #line default
 #line hidden
 #nullable disable
+#nullable restore
+#line 8 "C:\Users\milad\source\repos\LibraryServer\LibraryServer\Pages\AddCategory.razor"
+using System.Text.RegularExpressions;
+
+#line default
+#line hidden
+#nullable disable
     [Microsoft.AspNetCore.Components.RouteAttribute("/addCategory")]
     public partial class AddCategory : Microsoft.AspNetCore.Components.ComponentBase
     {
@@ -118,19 +125,31 @@ using Microsoft.AspNetCore.Components;
         }
         #pragma warning restore 1998
 #nullable restore
-#line 38 "C:\Users\milad\source\repos\LibraryServer\LibraryServer\Pages\AddCategory.razor"
+#line 40 "C:\Users\milad\source\repos\LibraryServer\LibraryServer\Pages\AddCategory.razor"
        
 
     string categoryName;
+    String errorString;
 
     private async Task addCategory()
     {
+        if (categoryName != null)
+        {
+            const string reduceMultiSpace = @"[ ]{2,}";
+            categoryName = Regex.Replace(categoryName.Replace("\t", " "), reduceMultiSpace, " ");
 
-        string sql = "insert into category (CategoryName) values (@CategoryName);";
+            errorString = "";
 
-        await data.StoreData(sql, new { CategoryName = @categoryName }, config.GetConnectionString("DefaultConnection"));
+            string sql = "insert into category (CategoryName) values (@CategoryName);";
 
-        navigationManager.NavigateTo("/category");
+            await data.StoreData(sql, new { CategoryName = @categoryName }, config.GetConnectionString("DefaultConnection"));
+
+            navigationManager.NavigateTo("/category");
+        }
+        else
+        {
+            errorString = "Please enter a category name!";
+        }
     }
 
     void cancel()

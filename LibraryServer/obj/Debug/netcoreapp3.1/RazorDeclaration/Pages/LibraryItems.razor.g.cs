@@ -97,14 +97,14 @@ using Microsoft.Extensions.Configuration;
 #nullable disable
 #nullable restore
 #line 6 "C:\Users\milad\source\repos\LibraryServer\LibraryServer\Pages\LibraryItems.razor"
-using System.Diagnostics;
+using System.Linq;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
 #line 7 "C:\Users\milad\source\repos\LibraryServer\LibraryServer\Pages\LibraryItems.razor"
-using System.Linq;
+using Blazored.SessionStorage;
 
 #line default
 #line hidden
@@ -118,7 +118,7 @@ using System.Linq;
         }
         #pragma warning restore 1998
 #nullable restore
-#line 75 "C:\Users\milad\source\repos\LibraryServer\LibraryServer\Pages\LibraryItems.razor"
+#line 76 "C:\Users\milad\source\repos\LibraryServer\LibraryServer\Pages\LibraryItems.razor"
        
 
     private class OptionSelector
@@ -127,20 +127,29 @@ using System.Linq;
         public string Name { get; set; }
     }
 
+    public class SessionSelector
+    {
+        public string Value { get; set; }
+    }
+
     List<LibraryItemModel> libraryItems;
 
-    List<OptionSelector> options = new List<OptionSelector>() 
+    List<OptionSelector> options = new List<OptionSelector>()
     {
         new OptionSelector { Value = "c.CategoryName", Name = "Category Name"},
         new OptionSelector { Value = "l.Type", Name = "Type" }
     };
 
     string selectedString = "Category Name";
+    public SessionSelector sessionSelector;
 
     protected override async Task OnInitializedAsync()
     {
-        string sql = InitSql("c.CategoryName");
+        var sessionSelector = new SessionSelector();
+        sessionSelector.Value = selectedString;
+        sessionSelector = await session.GetItemAsync<SessionSelector>("session");
 
+        string sql = InitSql("c.CategoryName");
         libraryItems = await data.LoadData<LibraryItemModel, dynamic>(sql, new { }, config.GetConnectionString("DefaultConnection"));
     }
 
@@ -155,8 +164,13 @@ using System.Linq;
 
     protected async Task OnSelect(ChangeEventArgs e)
     {
+        var sessionSelector = new SessionSelector();
         selectedString = this.options.SingleOrDefault(x => x.Value == e.Value.ToString()).Name;
-        var selector = e.Value.ToString();
+
+        sessionSelector.Value = selectedString;
+        await session.SetItemAsync("session", sessionSelector);
+
+        string selector = e.Value.ToString();
         var sql = InitSql(selector);
 
         libraryItems = await data.LoadData<LibraryItemModel, dynamic>(sql, new { }, config.GetConnectionString("DefaultConnection"));
@@ -174,6 +188,7 @@ using System.Linq;
 #line default
 #line hidden
 #nullable disable
+        [global::Microsoft.AspNetCore.Components.InjectAttribute] private ISessionStorageService session { get; set; }
         [global::Microsoft.AspNetCore.Components.InjectAttribute] private IConfiguration config { get; set; }
         [global::Microsoft.AspNetCore.Components.InjectAttribute] private IDataAccess data { get; set; }
     }

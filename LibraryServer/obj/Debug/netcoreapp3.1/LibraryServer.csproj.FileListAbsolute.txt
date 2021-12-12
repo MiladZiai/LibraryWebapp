@@ -73,3 +73,15 @@ C:\Users\milad\source\repos\LibraryServer\LibraryServer\obj\Debug\netcoreapp3.1\
 C:\Users\milad\source\repos\LibraryServer\LibraryServer\obj\Debug\netcoreapp3.1\Razor\Pages\AddLibraryItem.razor.g.cs
 C:\Users\milad\source\repos\LibraryServer\LibraryServer\obj\Debug\netcoreapp3.1\RazorDeclaration\Pages\EditLibraryItem.razor.g.cs
 C:\Users\milad\source\repos\LibraryServer\LibraryServer\obj\Debug\netcoreapp3.1\Razor\Pages\EditLibraryItem.razor.g.cs
+C:\Users\milad\source\repos\LibraryServer\LibraryServer\bin\Debug\netcoreapp3.1\Blazored.SessionStorage.dll
+C:\Users\milad\source\repos\LibraryServer\LibraryServer\bin\Debug\netcoreapp3.1\Microsoft.AspNetCore.Authorization.dll
+C:\Users\milad\source\repos\LibraryServer\LibraryServer\bin\Debug\netcoreapp3.1\Microsoft.AspNetCore.Components.dll
+C:\Users\milad\source\repos\LibraryServer\LibraryServer\bin\Debug\netcoreapp3.1\Microsoft.AspNetCore.Components.Forms.dll
+C:\Users\milad\source\repos\LibraryServer\LibraryServer\bin\Debug\netcoreapp3.1\Microsoft.AspNetCore.Components.Web.dll
+C:\Users\milad\source\repos\LibraryServer\LibraryServer\bin\Debug\netcoreapp3.1\Microsoft.AspNetCore.Metadata.dll
+C:\Users\milad\source\repos\LibraryServer\LibraryServer\bin\Debug\netcoreapp3.1\Microsoft.Extensions.DependencyInjection.dll
+C:\Users\milad\source\repos\LibraryServer\LibraryServer\bin\Debug\netcoreapp3.1\Microsoft.Extensions.DependencyInjection.Abstractions.dll
+C:\Users\milad\source\repos\LibraryServer\LibraryServer\bin\Debug\netcoreapp3.1\Microsoft.Extensions.Logging.Abstractions.dll
+C:\Users\milad\source\repos\LibraryServer\LibraryServer\bin\Debug\netcoreapp3.1\Microsoft.Extensions.Options.dll
+C:\Users\milad\source\repos\LibraryServer\LibraryServer\bin\Debug\netcoreapp3.1\Microsoft.Extensions.Primitives.dll
+C:\Users\milad\source\repos\LibraryServer\LibraryServer\bin\Debug\netcoreapp3.1\Microsoft.JSInterop.dll

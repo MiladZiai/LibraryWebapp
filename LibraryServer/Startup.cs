@@ -1,3 +1,4 @@
+using Blazored.SessionStorage;
 using DAL;
 using LibraryServer.Data;
 using Microsoft.AspNetCore.Builder;
@@ -31,6 +32,7 @@ namespace LibraryServer
             services.AddServerSideBlazor();
             services.AddSingleton<WeatherForecastService>();
             services.AddSingleton<IDataAccess, DataAccess>();
+            services.AddBlazoredSessionStorage();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
