@@ -9,6 +9,7 @@ namespace LibraryServer.Pages
     #line hidden
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using System.Threading.Tasks;
 #nullable restore
 #line 1 "C:\Users\milad\source\repos\LibraryServer\LibraryServer\_Imports.razor"
@@ -96,20 +97,6 @@ using Microsoft.Extensions.Configuration;
 #nullable disable
 #nullable restore
 #line 6 "C:\Users\milad\source\repos\LibraryServer\LibraryServer\Pages\EditLibraryItem.razor"
-using System.Diagnostics;
-
-#line default
-#line hidden
-#nullable disable
-#nullable restore
-#line 7 "C:\Users\milad\source\repos\LibraryServer\LibraryServer\Pages\EditLibraryItem.razor"
-using System.Linq;
-
-#line default
-#line hidden
-#nullable disable
-#nullable restore
-#line 8 "C:\Users\milad\source\repos\LibraryServer\LibraryServer\Pages\EditLibraryItem.razor"
 using Microsoft.AspNetCore.Components;
 
 #line default
@@ -124,7 +111,7 @@ using Microsoft.AspNetCore.Components;
         }
         #pragma warning restore 1998
 #nullable restore
-#line 130 "C:\Users\milad\source\repos\LibraryServer\LibraryServer\Pages\EditLibraryItem.razor"
+#line 125 "C:\Users\milad\source\repos\LibraryServer\LibraryServer\Pages\EditLibraryItem.razor"
        
 
     List<LibraryItemModel> libraryItem;
@@ -150,6 +137,7 @@ using Microsoft.AspNetCore.Components;
     {
         if(@Borrower == null)
         {
+            //Check in by entering empty string
             var sql = " update libraryitem set Borrower = @Borrower, BorrowDate = null " +
                       " where Id = @id ";
             await data.StoreData(sql, new { Borrower = @Borrower, Id = @id }, config.GetConnectionString("DefaultConnection"));
@@ -160,8 +148,6 @@ using Microsoft.AspNetCore.Components;
                          " where Id = @id ";
             await data.StoreData(sql, new { Borrower = @Borrower, Id = @id }, config.GetConnectionString("DefaultConnection"));
         }
-
-
         navigationManager.NavigateTo("/libraryItems");
     }
 

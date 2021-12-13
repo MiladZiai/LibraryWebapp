@@ -3,16 +3,12 @@
 @using DAL
 @using LibraryServer.Models
 @using Microsoft.Extensions.Configuration
-@using System.Diagnostics
-@using System.Linq
 @using Microsoft.AspNetCore.Components
 @inject IDataAccess data
 @inject IConfiguration config
 @inject NavigationManager navigationManager
 
-
 <h3>Edit Item</h3>
-
 
 @if (type == "DVD" || type == "Audio Book")
 {
@@ -126,7 +122,6 @@ else
 }
 
 
-
 @code {
 
     List<LibraryItemModel> libraryItem;
@@ -163,8 +158,6 @@ else
                          " where Id = @id ";
             await data.StoreData(sql, new { Borrower = @Borrower, Id = @id }, config.GetConnectionString("DefaultConnection"));
         }
-
-
         navigationManager.NavigateTo("/libraryItems");
     }
 

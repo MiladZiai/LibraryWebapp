@@ -38,7 +38,7 @@ else
                     <tr>
                         <td>@c.Id</td>
                         <td>@c.CategoryName</td>
-                        <td><a class="btn btn-primary" href='/editCategory/@c.Id/@c.CategoryName'>Edit category</a></td>
+                        <td><a class="btn btn-primary" href='/editCategory/@c.Id'>Edit category</a></td>
                         <td><a class="btn btn-primary" href='/addLibraryItem/@c.Id'>Add Item</a></td>
                         <td><a class="btn btn-warning" @onclick="() => deleteCategory(c.Id)">Delete category</a></td>
                     </tr>
@@ -65,7 +65,6 @@ else
 
     protected async Task deleteCategory(int id)
     {
-
         try
         {
             string sql = "delete from category where Id = @id";

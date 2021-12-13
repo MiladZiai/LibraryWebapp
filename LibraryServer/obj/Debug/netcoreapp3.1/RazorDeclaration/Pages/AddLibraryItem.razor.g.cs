@@ -83,34 +83,20 @@ using DAL;
 #nullable disable
 #nullable restore
 #line 4 "C:\Users\milad\source\repos\LibraryServer\LibraryServer\Pages\AddLibraryItem.razor"
-using LibraryServer.Models;
-
-#line default
-#line hidden
-#nullable disable
-#nullable restore
-#line 5 "C:\Users\milad\source\repos\LibraryServer\LibraryServer\Pages\AddLibraryItem.razor"
 using Microsoft.Extensions.Configuration;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
-#line 6 "C:\Users\milad\source\repos\LibraryServer\LibraryServer\Pages\AddLibraryItem.razor"
-using System.Diagnostics;
-
-#line default
-#line hidden
-#nullable disable
-#nullable restore
-#line 7 "C:\Users\milad\source\repos\LibraryServer\LibraryServer\Pages\AddLibraryItem.razor"
+#line 5 "C:\Users\milad\source\repos\LibraryServer\LibraryServer\Pages\AddLibraryItem.razor"
 using Microsoft.AspNetCore.Components;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
-#line 8 "C:\Users\milad\source\repos\LibraryServer\LibraryServer\Pages\AddLibraryItem.razor"
+#line 6 "C:\Users\milad\source\repos\LibraryServer\LibraryServer\Pages\AddLibraryItem.razor"
 using System.Text.RegularExpressions;
 
 #line default
@@ -125,7 +111,7 @@ using System.Text.RegularExpressions;
         }
         #pragma warning restore 1998
 #nullable restore
-#line 171 "C:\Users\milad\source\repos\LibraryServer\LibraryServer\Pages\AddLibraryItem.razor"
+#line 168 "C:\Users\milad\source\repos\LibraryServer\LibraryServer\Pages\AddLibraryItem.razor"
        
 
     [Parameter]
@@ -160,6 +146,7 @@ using System.Text.RegularExpressions;
             const string reduceMultiSpace = @"[ ]{2,}";
             Title = Regex.Replace(Title.Replace("\t", " "), reduceMultiSpace, " ");
             Type = Regex.Replace(Type.Replace("\t", " "), reduceMultiSpace, " ");
+
             if(selectedString == "Book" || selectedString == "Reference Book")
             {
                 Author = Regex.Replace(Author.Replace("\t", " "), reduceMultiSpace, " ");
@@ -178,7 +165,6 @@ using System.Text.RegularExpressions;
             }
 
             navigationManager.NavigateTo("/libraryItems");
-
         }
     }
 

@@ -128,7 +128,6 @@ using System.Diagnostics;
 
     protected async Task deleteCategory(int id)
     {
-
         try
         {
             string sql = "delete from category where Id = @id";

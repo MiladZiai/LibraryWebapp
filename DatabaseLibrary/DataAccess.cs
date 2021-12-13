@@ -11,7 +11,6 @@ namespace DAL
 {
     public class DataAccess : IDataAccess
     {
-
         public async Task<List<I>> LoadData<I, J>(string sql, J parameters, string connectionString)
         {
             using (IDbConnection connection = new MySqlConnection(connectionString))

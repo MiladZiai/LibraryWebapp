@@ -1,15 +1,12 @@
 ﻿@page "/addLibraryItem/{categoryId:int}"
 
 @using DAL
-@using LibraryServer.Models
 @using Microsoft.Extensions.Configuration
-@using System.Diagnostics
 @using Microsoft.AspNetCore.Components
 @using System.Text.RegularExpressions
 @inject IDataAccess data
 @inject IConfiguration config
 @inject NavigationManager navigationManager
-
 
 <h3>Add Library Item</h3>
 
@@ -202,6 +199,7 @@
             const string reduceMultiSpace = @"[ ]{2,}";
             Title = Regex.Replace(Title.Replace("\t", " "), reduceMultiSpace, " ");
             Type = Regex.Replace(Type.Replace("\t", " "), reduceMultiSpace, " ");
+
             if(selectedString == "Book" || selectedString == "Reference Book")
             {
                 Author = Regex.Replace(Author.Replace("\t", " "), reduceMultiSpace, " ");
@@ -220,7 +218,6 @@
             }
 
             navigationManager.NavigateTo("/libraryItems");
-
         }
     }
 

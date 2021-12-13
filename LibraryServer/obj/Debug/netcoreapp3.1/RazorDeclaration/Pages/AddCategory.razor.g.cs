@@ -83,34 +83,20 @@ using DAL;
 #nullable disable
 #nullable restore
 #line 4 "C:\Users\milad\source\repos\LibraryServer\LibraryServer\Pages\AddCategory.razor"
-using LibraryServer.Models;
-
-#line default
-#line hidden
-#nullable disable
-#nullable restore
-#line 5 "C:\Users\milad\source\repos\LibraryServer\LibraryServer\Pages\AddCategory.razor"
 using Microsoft.Extensions.Configuration;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
-#line 6 "C:\Users\milad\source\repos\LibraryServer\LibraryServer\Pages\AddCategory.razor"
-using System.Diagnostics;
-
-#line default
-#line hidden
-#nullable disable
-#nullable restore
-#line 7 "C:\Users\milad\source\repos\LibraryServer\LibraryServer\Pages\AddCategory.razor"
+#line 5 "C:\Users\milad\source\repos\LibraryServer\LibraryServer\Pages\AddCategory.razor"
 using Microsoft.AspNetCore.Components;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
-#line 8 "C:\Users\milad\source\repos\LibraryServer\LibraryServer\Pages\AddCategory.razor"
+#line 6 "C:\Users\milad\source\repos\LibraryServer\LibraryServer\Pages\AddCategory.razor"
 using System.Text.RegularExpressions;
 
 #line default
@@ -125,7 +111,7 @@ using System.Text.RegularExpressions;
         }
         #pragma warning restore 1998
 #nullable restore
-#line 40 "C:\Users\milad\source\repos\LibraryServer\LibraryServer\Pages\AddCategory.razor"
+#line 38 "C:\Users\milad\source\repos\LibraryServer\LibraryServer\Pages\AddCategory.razor"
        
 
     string categoryName;

@@ -16,8 +16,6 @@ C:\Users\milad\source\repos\LibraryServer\LibraryServer\obj\Debug\netcoreapp3.1\
 C:\Users\milad\source\repos\LibraryServer\LibraryServer\obj\Debug\netcoreapp3.1\LibraryServer.MvcApplicationPartsAssemblyInfo.cache
 C:\Users\milad\source\repos\LibraryServer\LibraryServer\obj\Debug\netcoreapp3.1\LibraryServer.RazorComponent.input.cache
 C:\Users\milad\source\repos\LibraryServer\LibraryServer\obj\Debug\netcoreapp3.1\RazorDeclaration\App.razor.g.cs
-C:\Users\milad\source\repos\LibraryServer\LibraryServer\obj\Debug\netcoreapp3.1\RazorDeclaration\Pages\FetchData.razor.g.cs
-C:\Users\milad\source\repos\LibraryServer\LibraryServer\obj\Debug\netcoreapp3.1\RazorDeclaration\Pages\Index.razor.g.cs
 C:\Users\milad\source\repos\LibraryServer\LibraryServer\obj\Debug\netcoreapp3.1\RazorDeclaration\Shared\MainLayout.razor.g.cs
 C:\Users\milad\source\repos\LibraryServer\LibraryServer\obj\Debug\netcoreapp3.1\RazorDeclaration\Shared\NavMenu.razor.g.cs
 C:\Users\milad\source\repos\LibraryServer\LibraryServer\obj\Debug\netcoreapp3.1\RazorDeclaration\Shared\SurveyPrompt.razor.g.cs
@@ -28,8 +26,6 @@ C:\Users\milad\source\repos\LibraryServer\LibraryServer\obj\Debug\netcoreapp3.1\
 C:\Users\milad\source\repos\LibraryServer\LibraryServer\obj\Debug\netcoreapp3.1\LibraryServer.TagHelpers.output.cache
 C:\Users\milad\source\repos\LibraryServer\LibraryServer\obj\Debug\netcoreapp3.1\LibraryServer.RazorCoreGenerate.cache
 C:\Users\milad\source\repos\LibraryServer\LibraryServer\obj\Debug\netcoreapp3.1\Razor\App.razor.g.cs
-C:\Users\milad\source\repos\LibraryServer\LibraryServer\obj\Debug\netcoreapp3.1\Razor\Pages\FetchData.razor.g.cs
-C:\Users\milad\source\repos\LibraryServer\LibraryServer\obj\Debug\netcoreapp3.1\Razor\Pages\Index.razor.g.cs
 C:\Users\milad\source\repos\LibraryServer\LibraryServer\obj\Debug\netcoreapp3.1\Razor\Shared\MainLayout.razor.g.cs
 C:\Users\milad\source\repos\LibraryServer\LibraryServer\obj\Debug\netcoreapp3.1\Razor\Shared\NavMenu.razor.g.cs
 C:\Users\milad\source\repos\LibraryServer\LibraryServer\obj\Debug\netcoreapp3.1\Razor\Shared\SurveyPrompt.razor.g.cs

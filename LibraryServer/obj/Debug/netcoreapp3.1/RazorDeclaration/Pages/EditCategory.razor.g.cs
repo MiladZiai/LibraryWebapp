@@ -9,7 +9,6 @@ namespace LibraryServer.Pages
     #line hidden
     using System;
     using System.Collections.Generic;
-    using System.Linq;
     using System.Threading.Tasks;
 #nullable restore
 #line 1 "C:\Users\milad\source\repos\LibraryServer\LibraryServer\_Imports.razor"
@@ -103,13 +102,27 @@ using System.Diagnostics;
 #line hidden
 #nullable disable
 #nullable restore
+#line 7 "C:\Users\milad\source\repos\LibraryServer\LibraryServer\Pages\EditCategory.razor"
+using System.Linq;
+
+#line default
+#line hidden
+#nullable disable
+#nullable restore
 #line 8 "C:\Users\milad\source\repos\LibraryServer\LibraryServer\Pages\EditCategory.razor"
 using Microsoft.AspNetCore.Components;
 
 #line default
 #line hidden
 #nullable disable
-    [Microsoft.AspNetCore.Components.RouteAttribute("/editCategory/{id:int}/{categoryName}")]
+#nullable restore
+#line 9 "C:\Users\milad\source\repos\LibraryServer\LibraryServer\Pages\EditCategory.razor"
+using System.Text.RegularExpressions;
+
+#line default
+#line hidden
+#nullable disable
+    [Microsoft.AspNetCore.Components.RouteAttribute("/editCategory/{id:int}")]
     public partial class EditCategory : Microsoft.AspNetCore.Components.ComponentBase
     {
         #pragma warning disable 1998
@@ -118,23 +131,35 @@ using Microsoft.AspNetCore.Components;
         }
         #pragma warning restore 1998
 #nullable restore
-#line 39 "C:\Users\milad\source\repos\LibraryServer\LibraryServer\Pages\EditCategory.razor"
+#line 41 "C:\Users\milad\source\repos\LibraryServer\LibraryServer\Pages\EditCategory.razor"
        
 
     [Parameter]
     public int id { get; set; }
 
-    [Parameter]
-    public string categoryName { get; set; }
+    string categoryName; 
+
+    string errorString;
 
     private async Task editCategory()
     {
+        if (categoryName != null)
+        {
+            const string reduceMultiSpace = @"[ ]{2,}";
+            categoryName = Regex.Replace(categoryName.Replace("\t", " "), reduceMultiSpace, " ");
 
-        string sql = "update category set CategoryName = @CategoryName where Id = @id";
+            errorString = "";
 
-        await data.StoreData(sql, new { CategoryName = @categoryName, Id = @id }, config.GetConnectionString("DefaultConnection"));
+            string sql = "update category set CategoryName = @CategoryName where Id = @id";
 
-        navigationManager.NavigateTo("/category");
+            await data.StoreData(sql, new { CategoryName = @categoryName, Id = @id }, config.GetConnectionString("DefaultConnection"));
+
+            navigationManager.NavigateTo("/category");
+        }
+        else
+        {
+            errorString = "Please enter a category name!";
+        }
     }
 
     void cancel()

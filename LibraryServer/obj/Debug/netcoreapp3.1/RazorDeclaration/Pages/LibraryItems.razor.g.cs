@@ -118,7 +118,7 @@ using Blazored.SessionStorage;
         }
         #pragma warning restore 1998
 #nullable restore
-#line 76 "C:\Users\milad\source\repos\LibraryServer\LibraryServer\Pages\LibraryItems.razor"
+#line 77 "C:\Users\milad\source\repos\LibraryServer\LibraryServer\Pages\LibraryItems.razor"
        
 
     private class OptionSelector
@@ -140,16 +140,17 @@ using Blazored.SessionStorage;
         new OptionSelector { Value = "l.Type", Name = "Type" }
     };
 
-    string selectedString = "Category Name";
+    OptionSelector selectedValue;
     public SessionSelector sessionSelector;
 
     protected override async Task OnInitializedAsync()
     {
-        var sessionSelector = new SessionSelector();
-        sessionSelector.Value = selectedString;
-        sessionSelector = await session.GetItemAsync<SessionSelector>("session");
 
-        string sql = InitSql("c.CategoryName");
+        var sessionSelector = new SessionSelector();
+        sessionSelector = await session.GetItemAsync<SessionSelector>("session");
+        selectedValue = sessionSelector?.Value != null ? this.options.FirstOrDefault(x => x.Name == sessionSelector.Value) : options[0];
+
+        string sql = InitSql(selectedValue.Value);
         libraryItems = await data.LoadData<LibraryItemModel, dynamic>(sql, new { }, config.GetConnectionString("DefaultConnection"));
     }
 
@@ -165,9 +166,9 @@ using Blazored.SessionStorage;
     protected async Task OnSelect(ChangeEventArgs e)
     {
         var sessionSelector = new SessionSelector();
-        selectedString = this.options.SingleOrDefault(x => x.Value == e.Value.ToString()).Name;
+        this.selectedValue = this.options.SingleOrDefault(x => x.Value == e.Value.ToString());
 
-        sessionSelector.Value = selectedString;
+        sessionSelector.Value = selectedValue.Name;
         await session.SetItemAsync("session", sessionSelector);
 
         string selector = e.Value.ToString();
@@ -183,6 +184,11 @@ using Blazored.SessionStorage;
                         " left join category as c " +
                         " on l.CategoryId = c.Id " +
                         $" order by {selector} ";
+    }
+
+    private bool isPicked(string selector) 
+    {
+        return selector == selectedValue.Value;
     }
 
 #line default

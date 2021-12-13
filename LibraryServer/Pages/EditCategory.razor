@@ -1,11 +1,12 @@
-﻿@page "/editCategory/{id:int}/{categoryName}"
+﻿@page "/editCategory/{id:int}"
 
 @using DAL
 @using LibraryServer.Models
 @using Microsoft.Extensions.Configuration
 @using System.Diagnostics
-using System.Linq
+@using System.Linq
 @using Microsoft.AspNetCore.Components
+@using System.Text.RegularExpressions
 @inject IDataAccess data
 @inject IConfiguration config
 @inject NavigationManager navigationManager
@@ -34,6 +35,7 @@ using System.Linq
         </form>
     </div>
 </div>
+<p style="color: red;">@errorString</p>
 
 
 @code {
@@ -41,17 +43,29 @@ using System.Linq
     [Parameter]
     public int id { get; set; }
 
-    [Parameter]
-    public string categoryName { get; set; }
+    string categoryName; 
+
+    string errorString;
 
     private async Task editCategory()
     {
+        if (categoryName != null)
+        {
+            const string reduceMultiSpace = @"[ ]{2,}";
+            categoryName = Regex.Replace(categoryName.Replace("\t", " "), reduceMultiSpace, " ");
 
-        string sql = "update category set CategoryName = @CategoryName where Id = @id";
+            errorString = "";
 
-        await data.StoreData(sql, new { CategoryName = @categoryName, Id = @id }, config.GetConnectionString("DefaultConnection"));
+            string sql = "update category set CategoryName = @CategoryName where Id = @id";
 
-        navigationManager.NavigateTo("/category");
+            await data.StoreData(sql, new { CategoryName = @categoryName, Id = @id }, config.GetConnectionString("DefaultConnection"));
+
+            navigationManager.NavigateTo("/category");
+        }
+        else
+        {
+            errorString = "Please enter a category name!";
+        }
     }
 
     void cancel()

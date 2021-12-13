@@ -19,10 +19,10 @@
 else
 {
     <p>Sort by</p>
-    <select class="form-control" @onchange="@OnSelect" style="width:170px">
+    <select @onchange="OnSelect" class="form-control" style="width:170px">
         @foreach (var option in options)
         {
-            <option value=@option.Value>@option.Name</option>
+            <option selected="@isPicked(option.Value)" value=@option.Value>@option.Name</option>
         }
     </select>
     <br />
@@ -94,16 +94,16 @@ else
         new OptionSelector { Value = "l.Type", Name = "Type" }
     };
 
-    string selectedString = "Category Name";
+    OptionSelector selectedValue;
     public SessionSelector sessionSelector;
 
     protected override async Task OnInitializedAsync()
     {
         var sessionSelector = new SessionSelector();
-        sessionSelector.Value = selectedString;
         sessionSelector = await session.GetItemAsync<SessionSelector>("session");
+        selectedValue = sessionSelector?.Value != null ? this.options.FirstOrDefault(x => x.Name == sessionSelector.Value) : options[0];
 
-        string sql = InitSql("c.CategoryName");
+        string sql = InitSql(selectedValue.Value);
         libraryItems = await data.LoadData<LibraryItemModel, dynamic>(sql, new { }, config.GetConnectionString("DefaultConnection"));
     }
 
@@ -119,9 +119,9 @@ else
     protected async Task OnSelect(ChangeEventArgs e)
     {
         var sessionSelector = new SessionSelector();
-        selectedString = this.options.SingleOrDefault(x => x.Value == e.Value.ToString()).Name;
+        this.selectedValue = this.options.SingleOrDefault(x => x.Value == e.Value.ToString());
 
-        sessionSelector.Value = selectedString;
+        sessionSelector.Value = selectedValue.Name;
         await session.SetItemAsync("session", sessionSelector);
 
         string selector = e.Value.ToString();
@@ -137,6 +137,11 @@ else
                         " left join category as c " +
                         " on l.CategoryId = c.Id " +
                         $" order by {selector} ";
+    }
+
+    private bool isPicked(string selector) 
+    {
+        return selector == selectedValue.Value;
     }
 }
 
